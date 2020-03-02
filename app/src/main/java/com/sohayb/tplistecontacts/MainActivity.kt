@@ -1,8 +1,12 @@
 package com.sohayb.tplistecontacts
 
+import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.sohayb.tplistecontacts.Model.Contact
@@ -10,7 +14,7 @@ import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     var equipe = arrayOf(
         "OL",
@@ -36,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     )
     var listeEquipes = ArrayList(Arrays.asList(*equipe))
 
+    // @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -44,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val contacts: ArrayList<Contact> = ArrayList()
-
+        //val image : ImageView= findViewById(R.drawable.person_icon)
         for (i in 1..50) {
             contacts.add(
                 Contact("Chicco $i", "Troll $i", "06336745 $i" + i, null, "Rue de la croix $i")
@@ -54,7 +59,6 @@ class MainActivity : AppCompatActivity() {
         //setSupportActionBar(toolbar)
 
         initRecyclerView(contacts)
-
 
 
         //val lv = findViewById<ListView>(R.id.listevue)
@@ -107,6 +111,11 @@ class MainActivity : AppCompatActivity() {
             val topSpacingDecorator = TopSpacingItemDecoration(50)
             addItemDecoration(topSpacingDecorator)
             adapter = ContactRecyclerAdapter(contacts)
+
         }
+    }
+
+    override fun onClick(v: View?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
