@@ -4,10 +4,10 @@ import android.widget.ImageView
 
 data class Contact(
 
-    val Nom : String  ,
-    val Prenom : String ,
+    val Nom: String,
+    val Prenom: String,
     val phoneNum : String,
-    val image : ImageView,
+    val image: ImageView?,
     val address : String
 
 ) {
