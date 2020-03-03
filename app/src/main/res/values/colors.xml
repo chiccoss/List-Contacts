@@ -3,4 +3,14 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="nerissimo">#1F2122</color>
+    <color name="neromedio">#272B2C</color>
+    <color name="nerochiaro">#454D4E</color>
+    <color name="rossorosa">#E13A61</color>
+    <color name="blubello">#2291FF</color>
+    <color name="bianco">#FFFFFF</color>
+    <color name="biancotrasparente">#59FFFFFF</color>
+    <color name="blutraspa">#A62291FF</color>
+    <color name="gritraspa">#A6454D4E</color>
+
 </resources>

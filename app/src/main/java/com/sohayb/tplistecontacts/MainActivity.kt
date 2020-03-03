@@ -1,18 +1,21 @@
 package com.sohayb.tplistecontacts
 
-import android.annotation.SuppressLint
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Website.URL
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.sohayb.tplistecontacts.Model.Contact
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -49,10 +52,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
 
         val contacts: ArrayList<Contact> = ArrayList()
+
         //val image : ImageView= findViewById(R.drawable.person_icon)
+
         for (i in 1..50) {
             contacts.add(
-                Contact("Chicco $i", "Troll $i", "06336745 $i" + i, null, "Rue de la croix $i")
+                Contact(
+                    "Chicco ${i - 1}",
+                    "Troll ${i - 1}",
+                    "06336745 ${i - 1}",
+                    "https://cdn.pixabay.com/photo/2018/04/06/00/25/nature-3294681_960_720.jpg",
+                    "Rue de la croix ${i - 1}"
+                )
             )
         }
 
@@ -101,18 +112,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         val fab: View = findViewById(R.id.fab)
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                .setAction("Action", null)
-                .show()
+            val destination = Intent(this@MainActivity, CreateNewContact::class.java)
+            startActivity(destination)
         }
 
         recycler_view.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
-            val topSpacingDecorator = TopSpacingItemDecoration(50)
+            val topSpacingDecorator = TopSpacingItemDecoration(16)
             addItemDecoration(topSpacingDecorator)
             adapter = ContactRecyclerAdapter(contacts)
+        }
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 1) {
+            Toast.makeText(this, "Done back", Toast.LENGTH_LONG).show()
+
 
         }
+
     }
 
     override fun onClick(v: View?) {

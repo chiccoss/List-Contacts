@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">TPListeContacts</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
+    <string name="app_name1">Contacts</string>
+    <string name="textview">TextView</string>
+
+
 </resources>
