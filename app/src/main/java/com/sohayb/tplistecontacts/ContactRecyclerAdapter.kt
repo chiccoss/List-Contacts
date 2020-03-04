@@ -2,15 +2,10 @@ package com.sohayb.tplistecontacts
 
 import android.app.Activity
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.sohayb.tplistecontacts.Model.Contact
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.contacts_view.view.*
+import kotlin.collections.ArrayList
 
 
 class ContactRecyclerAdapter(val contacts: ArrayList<Contact>) :
@@ -42,12 +38,8 @@ class ContactRecyclerAdapter(val contacts: ArrayList<Contact>) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ContactsViewHolder -> {
-                holder.bind(contacts.get(position), position)
-
-
+                holder.bind(contacts.get(position), position, contacts)
             }
-
-
         }
     }
 
@@ -61,7 +53,11 @@ class ContactRecyclerAdapter(val contacts: ArrayList<Contact>) :
         val contactName = itemView.name
         val ContactImage = itemView.ContactImages
 
-        fun bind(contact: Contact, position: Int) {
+        fun bind(
+            contact: Contact,
+            position: Int,
+            contacts: ArrayList<Contact>
+        ) {
 
 
             val requestOptions = RequestOptions()
@@ -83,11 +79,38 @@ class ContactRecyclerAdapter(val contacts: ArrayList<Contact>) :
                       .also { it.putExtra("name", contactName?.text)
                            }
                   (context as Activity).startActivityForResult(destination, 1)*/
+                val destination = Intent(context, ViewContact::class.java).apply {
+                    putExtra("ContactName", contact.Nom)
+                    putExtra("ContactSurname", contact.Prenom)
+                    putExtra("ContactAddress", contact.address)
+                    putExtra("ContactImage", contact.image)
+                    putExtra("ContactNumber", contact.phoneNum)
+                }
+                (context as Activity).startActivity(destination)
                 Toast.makeText(it!!.context, position.toString(), Toast.LENGTH_SHORT).show()
             })
 
             itemView.setOnLongClickListener(View.OnLongClickListener {
+                val WindowOptions =
+                    arrayOf("Edit", "View", "Place on home screen", "Delete")
 
+                val builder =
+                    context?.let { it1 -> AlertDialog.Builder(it1) }
+                builder?.setTitle("Select an option")
+                builder?.setItems(
+                    WindowOptions
+                ) { dialog, which ->
+                    // the user clicked on colors[which]
+                    testSelectedItem(
+                        WindowOptions[which],
+                        contact,
+                        contacts,
+                        context,
+                        this@ContactRecyclerAdapter
+                    )
+                    Toast.makeText(it.context, WindowOptions[which], Toast.LENGTH_SHORT).show()
+                }
+                builder?.show()
 
                 Toast.makeText(it.context, "long click", Toast.LENGTH_SHORT).show()
                 true
@@ -99,6 +122,42 @@ class ContactRecyclerAdapter(val contacts: ArrayList<Contact>) :
 
     }
 }
+
+
+fun testSelectedItem(
+    option: String,
+    contact: Contact,
+    contacts: ArrayList<Contact>,
+    context: Context?,
+    contactRecyclerAdapter: ContactRecyclerAdapter
+) {
+    if (option == "Delete") {
+        contacts.remove(contact)
+        contactRecyclerAdapter.notifyDataSetChanged()
+    }
+
+    if (option == "Edit") {
+        contacts.remove(contact)
+    }
+
+    if (option == "View") {
+        val destination = Intent(context, ViewContact::class.java).apply {
+            putExtra("ContactName", contact.Nom)
+            putExtra("ContactSurname", contact.Prenom)
+            putExtra("ContactAddress", contact.address)
+            putExtra("ContactImage", contact.image)
+            putExtra("ContactNumber", contact.phoneNum)
+        }
+        (context as Activity).startActivity(destination)
+    }
+
+    if (option == "Place on home screen") {
+        contacts.remove(contact)
+    }
+
+
+}
+
 
 
 /*    val dialogBuilder = context?.let { it1 -> AlertDialog.Builder(it1) }

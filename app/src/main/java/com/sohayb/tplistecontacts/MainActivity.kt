@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     "Chicco ${i - 1}",
                     "Troll ${i - 1}",
                     "06336745 ${i - 1}",
-                    "https://cdn.pixabay.com/photo/2018/04/06/00/25/nature-3294681_960_720.jpg",
+                    "https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png",
                     "Rue de la croix ${i - 1}"
                 )
             )
@@ -121,6 +121,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val topSpacingDecorator = TopSpacingItemDecoration(16)
             addItemDecoration(topSpacingDecorator)
             adapter = ContactRecyclerAdapter(contacts)
+            (adapter as ContactRecyclerAdapter).notifyDataSetChanged()
         }
     }
 
