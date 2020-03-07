@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#60355F"
+    tools:context=".ViewContact">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ImageView
+            android:id="@+id/EimageView"
+            android:layout_width="389dp"
+            android:layout_height="221dp"
+            android:layout_marginTop="19dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/person_icon" />
+
+        <TextView
+            android:id="@+id/Eprenom"
+            android:layout_width="83dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/rounded_corner"
+            android:textColor="@color/bianco"
+            android:text="Prenom : "
+            android:textSize="@dimen/TXTSIZE"
+            app:layout_constraintEnd_toStartOf="@+id/EPrenomTextView"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Enom" />
+
+        <TextView
+            android:id="@+id/Eaddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:background="@drawable/rounded_corner"
+            android:text="Address : "
+            android:textColor="@color/bianco"
+            android:textSize="@dimen/TXTSIZE"
+            app:layout_constraintEnd_toStartOf="@+id/EAdressTextView"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Eprenom" />
+
+        <EditText
+            android:id="@+id/EPrenomTextView"
+            android:layout_width="240dp"
+            android:layout_height="49dp"
+
+            android:layout_marginTop="32dp"
+            android:text="TextView"
+            android:textColor="@color/bianco"
+            android:textSize="@dimen/TXTSIZE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/Eprenom"
+            app:layout_constraintTop_toBottomOf="@+id/ENomTextView" />
+
+        <EditText
+            android:id="@+id/EAdressTextView"
+            android:layout_width="242dp"
+            android:layout_height="82dp"
+            android:layout_marginTop="52dp"
+            android:text="TextView"
+
+            android:textColor="@color/bianco"
+            android:textSize="@dimen/TXTSIZE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/Eaddress"
+            app:layout_constraintTop_toBottomOf="@+id/EPrenomTextView" />
+
+        <EditText
+            android:id="@+id/ENumTextView"
+
+            android:layout_width="233dp"
+            android:layout_height="139dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp"
+            android:text="TextView"
+            android:textColor="@color/bianco"
+            android:textSize="@dimen/TXTSIZE"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/ENum"
+            app:layout_constraintTop_toBottomOf="@+id/EAdressTextView" />
+
+        <TextView
+            android:id="@+id/ENum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="72dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/rounded_corner"
+            android:textColor="@color/bianco"
+            android:text="@string/telephone"
+            android:textSize="@dimen/TXTSIZE"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ENumTextView"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Eaddress"
+            app:layout_constraintVertical_bias="0.028" />
+
+        <EditText
+
+            android:id="@+id/ENomTextView"
+            android:layout_width="284dp"
+            android:layout_height="43dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
+            android:text="TextView"
+            android:textColor="@color/bianco"
+            android:textSize="@dimen/TXTSIZE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/Enom"
+            app:layout_constraintTop_toBottomOf="@+id/EimageView" />
+
+        <TextView
+            android:id="@+id/Enom"
+            android:textColor="@color/bianco"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/rounded_corner"
+            android:text="Nom :"
+            android:textSize="@dimen/TXTSIZE"
+            app:layout_constraintEnd_toStartOf="@+id/ENomTextView"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EimageView" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/Egroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/buttonModify"
+            android:layout_width="107dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="68dp"
+            android:text="modify"
+            android:textColor="@color/bianco"
+            android:background="@drawable/rounded_corner"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ENumTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ENum" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

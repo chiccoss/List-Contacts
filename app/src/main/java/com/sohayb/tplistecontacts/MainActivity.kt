@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.ContactsContract.CommonDataKinds.Website.URL
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -13,63 +14,40 @@ import com.google.android.material.snackbar.Snackbar
 import com.sohayb.tplistecontacts.Model.Contact
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_main.*
+import org.jetbrains.anko.startActivity
 import java.util.*
 import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
-    var equipe = arrayOf(
-        "OL",
-        "OM",
-        "PSG",
-        "ASSE",
-        "LOSC",
-        "OL",
-        "OM",
-        "PSG",
-        "ASSE",
-        "LOSC",
-        "OL",
-        "OM",
-        "PSG",
-        "ASSE",
-        "LOSC",
-        "OL",
-        "OM",
-        "PSG",
-        "ASSE",
-        "LOSC"
-    )
-    var listeEquipes = ArrayList(Arrays.asList(*equipe))
 
     // @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
+
+        var bunldes: Bundle? = intent.extras
+
+
 
         //@TODO iNSERT CONTACTS FROM JSON
 
 
-        val contacts: ArrayList<Contact> = ArrayList()
+        val contacts: ArrayList<Contact>? = DataSource.GetDataSet(this) //get(this,"Contacts.json")
 
         //val image : ImageView= findViewById(R.drawable.person_icon)
 
-        for (i in 1..50) {
-            contacts.add(
-                Contact(
-                    "Chicco ${i - 1}",
-                    "Troll ${i - 1}",
-                    "06336745 ${i - 1}",
-                    "https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png",
-                    "Rue de la croix ${i - 1}"
-                )
-            )
-        }
+
 
         //setSupportActionBar(toolbar)
 
-        initRecyclerView(contacts)
+        if (contacts != null) {
+            initRecyclerView(contacts)
+        } else {
+            Log.i("tag", "contacts is null")
+        }
 
 
         //val lv = findViewById<ListView>(R.id.listevue)
@@ -106,14 +84,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                  true
              }*/
+
     }
+
 
     private fun initRecyclerView(contacts: ArrayList<Contact>) {
 
         val fab: View = findViewById(R.id.fab)
         fab.setOnClickListener { view ->
             val destination = Intent(this@MainActivity, CreateNewContact::class.java)
-            startActivity(destination)
+            startActivityForResult(destination, 4)
         }
 
         recycler_view.apply {
@@ -131,13 +111,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         if (requestCode == 1) {
             Toast.makeText(this, "Done back", Toast.LENGTH_LONG).show()
-
-
         }
-
+        if (requestCode == 23) {
+            Toast.makeText(this, "Done BACKKK FROM 23", Toast.LENGTH_LONG).show()
+        }
+        if (requestCode == 4) {
+            Toast.makeText(this, "Done BACKKK FROM 4", Toast.LENGTH_LONG).show()
+        }
     }
 
     override fun onClick(v: View?) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
+
 }

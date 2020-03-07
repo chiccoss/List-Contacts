@@ -8,10 +8,11 @@ import kotlinx.android.synthetic.main.create_contact.*
 
 class CreateNewContact : Activity() {
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.create_contact)
 
     }
+
 
 }
