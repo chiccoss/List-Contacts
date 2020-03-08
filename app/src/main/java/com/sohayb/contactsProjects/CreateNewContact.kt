@@ -1,6 +1,8 @@
 package com.sohayb.contactsProjects
 
 import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
@@ -16,16 +18,17 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.create_contact.*
 import kotlinx.android.synthetic.main.modify_contact.*
-import java.io.ByteArrayOutputStream
+import java.io.*
 import java.net.URI
+import java.util.*
 
 
 class CreateNewContact : Activity() {
 
     var imageBitmap: Bitmap? = null
     var selectedFile: Uri? = null
-    var B: Boolean = false
-    var U: Boolean = false
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.create_contact)
@@ -74,36 +77,17 @@ class CreateNewContact : Activity() {
             }
 
             if (CimageView != null) {
-                Log.i("tagB", imageBitmap.toString())
-                Log.i("tagS", selectedFile.toString())
-
-                if (imageBitmap == null) {
-                    image = selectedFile.toString()
-
-                } else {
-                    image = imageBitmap.toString()
-                }
-
-
+                image = selectedFile.toString()
             }
-
 
             val intent = Intent().apply {
                 putExtra("ContactName", nom)
                 putExtra("ContactSurname", prenom)
                 putExtra("ContactAddress", address)
                 putExtra("ContactNumber", numPhone)
+                putExtra("ContactImage", image)
             }
 
-            if (B && !U) {
-                intent.apply {
-                    putExtra("ContactImage", imageBitmap)
-                }
-            } else {
-                intent.apply {
-                    putExtra("ContactImage", image)
-                }
-            }
             setResult(RESULT_OK, intent)
             onBackPressed()
         }
@@ -139,11 +123,8 @@ class CreateNewContact : Activity() {
                     }
                 }
             })
-
         val alert = dialogBuilder.create()
-
         alert.setTitle("SELECT IMAGE ")
-
         alert.show()
 
 
@@ -158,19 +139,40 @@ class CreateNewContact : Activity() {
             CimageView.setImageURI(selectedFile)
             CimageView.adjustViewBounds = true
             ButtonImage.setVisibility(View.GONE);
-            B = false
-            U = true
         }
         if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
             //WITH  CAMERA
             imageBitmap = data!!.extras!!.get("data") as Bitmap
             CimageView.setImageBitmap(imageBitmap)
             CimageView.adjustViewBounds = true
+            selectedFile = bitmapToFile(imageBitmap)
             ButtonImage.setVisibility(View.GONE);
-            B = true
-            U = false
         }
     }
+
+
+    private fun bitmapToFile(bitmap: Bitmap?): Uri {
+        // Get the context wrapper
+        val wrapper = ContextWrapper(applicationContext)
+
+        // Initialize a new file instance to save bitmap object
+        var file = wrapper.getDir("Images", Context.MODE_PRIVATE)
+        file = File(file, "${UUID.randomUUID()}.jpg")
+
+        try {
+            // Compress the bitmap and save in jpg format
+            val stream: OutputStream = FileOutputStream(file)
+            bitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            stream.flush()
+            stream.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        // Return the saved bitmap uri
+        return Uri.parse(file.absolutePath)
+    }
+
 
 
 }

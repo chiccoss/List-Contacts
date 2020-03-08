@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -23,6 +24,7 @@ class ContactRecyclerAdapter(val contacts: ArrayList<Contact>) :
 
 
     var context: Context? = null
+    val OPEN_REQUEST_CODE = 41
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         context = parent.getContext();
@@ -78,6 +80,11 @@ class ContactRecyclerAdapter(val contacts: ArrayList<Contact>) :
 
                 fileUri = Uri.parse(contact.image)
                 ContactImage.setImageURI(fileUri)
+                //  val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                //intent.addCategory(Intent.CATEGORY_OPENABLE)
+                //intent.type="image/*"
+                //(context as Activity).startActivityForResult(intent,OPEN_REQUEST_CODE)
+
             }
 
 
@@ -186,3 +193,4 @@ fun callPhone(context: Context?, phoneNum: String) {
     (context as Activity).startActivity(intent)
 
 }
+

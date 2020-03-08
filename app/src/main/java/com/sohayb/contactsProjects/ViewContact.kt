@@ -4,11 +4,14 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.view.View
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.view_contact.*
+import org.jetbrains.anko.internals.AnkoInternals.getContext
+
 
 class ViewContact : AppCompatActivity() {
 
@@ -30,8 +33,8 @@ class ViewContact : AppCompatActivity() {
             Picasso.get().load(image).into(imageView);
         } else {
             fileUri = Uri.parse(image)
+            Log.i("Logg", fileUri.toString())
             imageView.setImageURI(fileUri)
-
         }
         PrenomTextView.text = Prenom
         AdressTextView.text = address
@@ -44,8 +47,6 @@ class ViewContact : AppCompatActivity() {
         btnSendSMS.setOnClickListener {
             sendSMS(phoneNum)
         }
-
-
 
     }
 
