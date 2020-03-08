@@ -66,6 +66,21 @@ class MainActivity : AppCompatActivity() {
         }
         if (requestCode == 23) {
             Toast.makeText(this, "Done BACKKK FROM 23", Toast.LENGTH_LONG).show()
+            if (resultCode == Activity.RESULT_OK) { // Get String data from Intent
+                val nom = data!!.getStringExtra("ContactSurname")
+                val prenom = data.getStringExtra("ContactName")
+                val address = data.getStringExtra("ContactAddress")
+                val numero = data.getStringExtra("ContactNumber")
+                val image = data.getStringExtra("ContactImage")
+
+                contacts!!.add(0, Contact(nom!!, prenom!!, numero!!, image!!, address!!))
+                toastS(image)
+
+                // var fileUri: Uri = Uri.parse(image)
+                recycler_view.adapter!!.notifyDataSetChanged()
+
+
+            }
         }
         if (requestCode == 4) {
 

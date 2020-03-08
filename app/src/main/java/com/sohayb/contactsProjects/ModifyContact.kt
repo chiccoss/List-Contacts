@@ -1,19 +1,37 @@
 package com.sohayb.contactsProjects
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.util.Patterns
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.modify_contact.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
+import java.util.*
 
 class ModifyContact : AppCompatActivity() {
+    var imageBitmap: Bitmap? = null
+    var selectedFile: Uri? = null
 
+    var nom: String? = null
+    var prenom: String? = null
+    var address: String? = null
+    var numPhone: String? = null
+    var image: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -21,58 +39,71 @@ class ModifyContact : AppCompatActivity() {
 
         var bundles = intent.extras
 
-        val Nom: String? = bundles!!.getString("ContactSurname")
-        val Prenom: String? = bundles!!.getString("ContactName")
-        val phoneNum: String? = bundles!!.getString("ContactNumber")
-        val image: String? = bundles!!.getString("ContactImage")
-        val address: String? = bundles!!.getString("ContactAddress")
+        var Nom: String? = bundles!!.getString("ContactSurname")
+        var Prenom: String? = bundles!!.getString("ContactName")
+        var phoneNum: String? = bundles!!.getString("ContactNumber")
+        var Image: String? = bundles!!.getString("ContactImage")
+        var Address: String? = bundles!!.getString("ContactAddress")
 
-        Picasso.get().load(image).into(EimageView);
-        EAdressTextView.setText(address)
+        EimageView.setOnClickListener {
+            dispatchTakePictureIntent()
+        }
+
+        Picasso.get().load(Image).into(EimageView);
+        EAdressTextView.setText(Address)
         ENumTextView.setText(phoneNum)
         EPrenomTextView.setText(Prenom)
         ENomTextView.setText(Nom)
 
 
         buttonModify.setOnClickListener {
-
-            if (ENomTextView.text.toString() != "") {
-                /* val destination = Intent(this, MainActivity::class.java).apply {
-                     putExtra("ContactName", "contact.Nom")
-                     putExtra("ContactSurname", "contact.Prenom")
-                     putExtra("ContactAddress", "contact.address")
-                     putExtra("ContactImage", "contact.image")
-                     putExtra("ContactNumber", "contact.phoneNum")
-                 }*/
-                //startActivity(destination)
-                //@todo set contact name to this : contact.Nom.text = ENomTextView.text.toString()
-                Log.i("tag", "From 1")
-                Toast.makeText(this, "You changed nada", Toast.LENGTH_SHORT).show();
-            }
             if (EAdressTextView.text.toString() != "") {
-                Log.i("tag", "From 2")
-                Toast.makeText(this, "You changed nada", Toast.LENGTH_SHORT).show();
+                address = EAdressTextView.text.toString()
+                setResult(Activity.RESULT_OK, intent);
             }
-            if (EPrenomTextView.text.toString() != "") {
-                Log.i("tag", "From 3")
-                Toast.makeText(this, "You changed nada", Toast.LENGTH_SHORT).show();
+            if (ENomTextView.text.toString() != "") {
+                nom = ENomTextView.text.toString()
+                Nom = nom
             }
             if (ENumTextView.text.toString() != "") {
-                Log.i("tag", "From 4")
-                Toast.makeText(this, "You changed nada", Toast.LENGTH_SHORT).show();
+
+
+                if (PhoneIsValid(ENumTextView.text.toString())) {
+                    numPhone = ENumTextView.text.toString()
+                } else {
+
+                    setResult(Activity.RESULT_CANCELED)
+                    onBackPressed()
+                }
+
             }
+            if (EPrenomTextView.text.toString() != "") {
+
+                prenom = EPrenomTextView.text.toString()
+            }
+
+            if (EimageView != null) {
+                image = selectedFile.toString()
+            }
+
+            val intent = Intent().apply {
+                putExtra("ContactName", nom)
+                putExtra("ContactSurname", prenom)
+                putExtra("ContactAddress", address)
+                putExtra("ContactNumber", numPhone)
+                putExtra("ContactImage", image)
+            }
+            setResult(Activity.RESULT_OK, intent)
             onBackPressed()
-
         }
-
-        EimageView.setOnClickListener {
-            dispatchTakePictureIntent()
-        }
-
 
     }
 
-
+    private fun PhoneIsValid(phone: String): Boolean =
+        when {
+            Patterns.PHONE.matcher(phone).matches() -> true
+            else -> false
+        }
     private fun dispatchTakePictureIntent() {
 
         //Alert dialog
@@ -96,40 +127,51 @@ class ModifyContact : AppCompatActivity() {
                     }
                 }
             })
-
         val alert = dialogBuilder.create()
-
-        alert.setTitle("You are connected")
-
+        alert.setTitle("SELECT IMAGE ")
         alert.show()
 
 
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == 111 && resultCode == RESULT_OK) {
-            val selectedFile = data?.data //The uri with the location of the file
-
+        if (requestCode == 111 && resultCode == AppCompatActivity.RESULT_OK) {
+            // FROM STORAGE
+            selectedFile = data?.data //The uri with the location of the file
             EimageView.setImageURI(selectedFile)
             EimageView.adjustViewBounds = true
+
         }
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            val imageBitmap = data!!.extras!!.get("data") as Bitmap
+        if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
+            //WITH  CAMERA
+            imageBitmap = data!!.extras!!.get("data") as Bitmap
             EimageView.setImageBitmap(imageBitmap)
             EimageView.adjustViewBounds = true
+            selectedFile = bitmapToFile(imageBitmap)
+
+        }
+    }
+
+    private fun bitmapToFile(bitmap: Bitmap?): Uri {
+        // Get the context wrapper
+        val wrapper = ContextWrapper(applicationContext)
+
+        // Initialize a new file instance to save bitmap object
+        var file = wrapper.getDir("Images", Context.MODE_PRIVATE)
+        file = File(file, "${UUID.randomUUID()}.jpg")
+
+        try {
+            // Compress the bitmap and save in jpg format
+            val stream: OutputStream = FileOutputStream(file)
+            bitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            stream.flush()
+            stream.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
 
-
+        // Return the saved bitmap uri
+        return Uri.parse(file.absolutePath)
     }
-
-
-    override fun onBackPressed() {
-        finish()
-        //super.onBackPressed()
-
-
-    }
-
 }
