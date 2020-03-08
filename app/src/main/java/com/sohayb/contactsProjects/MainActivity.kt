@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.sohayb.contactsProjects.Database.DataBaseHandler
 import com.sohayb.contactsProjects.Model.Contact
 import kotlinx.android.synthetic.main.content_main.*
 import java.io.File
@@ -26,6 +27,7 @@ import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
     var contacts: ArrayList<Contact>? = null
+    val context = this
 
     // @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +39,8 @@ class MainActivity : AppCompatActivity() {
 
         contacts = DataSource.GetDataSet(this) //get(this,"Contacts.json")
         contacts?.let { initRecyclerView(it) } ?: Log.i("tag", "contacts is null")
+
+
     }
 
 
@@ -73,9 +77,9 @@ class MainActivity : AppCompatActivity() {
                 val numero = data.getStringExtra("ContactNumber")
                 val image = data.getStringExtra("ContactImage")
 
-                contacts!!.add(0, Contact(nom!!, prenom!!, numero!!, image!!, address!!))
-                toastS(image)
-
+                //contacts!!.add(0, Contact(nom!!, prenom!!, numero!!, image!!, address!!))
+                //toastS(image)
+                //@TODO IMPLEMENT MODIFY CONTACT
                 // var fileUri: Uri = Uri.parse(image)
                 recycler_view.adapter!!.notifyDataSetChanged()
 
@@ -91,16 +95,16 @@ class MainActivity : AppCompatActivity() {
                 val numero = data.getStringExtra("ContactNumber")
                 val image = data.getStringExtra("ContactImage")
 
+                var contact = Contact(nom!!, prenom!!, numero!!, image!!, address!!)
+                var db = DataBaseHandler(context)
+                db.insertData(contact)
+
                 contacts!!.add(0, Contact(nom!!, prenom!!, numero!!, image!!, address!!))
                 toastS(image)
 
                 // var fileUri: Uri = Uri.parse(image)
                 recycler_view.adapter!!.notifyDataSetChanged()
-
-
             }
-
-
         }
     }
 
