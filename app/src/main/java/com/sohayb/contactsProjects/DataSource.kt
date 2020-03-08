@@ -1,8 +1,8 @@
-package com.sohayb.tplistecontacts
+package com.sohayb.contactsProjects
 
 import android.content.Context
 import android.util.Log
-import com.sohayb.tplistecontacts.Model.Contact
+import com.sohayb.contactsProjects.Model.Contact
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
@@ -73,8 +73,17 @@ class DataSource {
             return contacts
         }
 
-        fun ModifyDataSet(): Unit {
+        fun AddToDataSet(contact: Contact) {
 
+
+        }
+
+        fun DeleteFromDataSet(contact: Contact) {
+
+
+        }
+
+        fun modifyDataset() {
 
         }
 

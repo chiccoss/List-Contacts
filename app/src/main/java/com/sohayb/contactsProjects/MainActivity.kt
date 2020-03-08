@@ -1,26 +1,23 @@
-package com.sohayb.tplistecontacts
+package com.sohayb.contactsProjects
 
+import com.sohayb.contactsProjects.R
+import android.app.Activity
 import android.content.Intent
-import android.graphics.BitmapFactory
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Website.URL
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
-import com.sohayb.tplistecontacts.Model.Contact
-import com.squareup.picasso.Picasso
+import com.sohayb.contactsProjects.Model.Contact
 import kotlinx.android.synthetic.main.content_main.*
-import org.jetbrains.anko.startActivity
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
-
+    var contacts: ArrayList<Contact>? = null
 
     // @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,23 +28,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         var bunldes: Bundle? = intent.extras
 
 
-
         //@TODO iNSERT CONTACTS FROM JSON
 
 
-        val contacts: ArrayList<Contact>? = DataSource.GetDataSet(this) //get(this,"Contacts.json")
+        contacts = DataSource.GetDataSet(this) //get(this,"Contacts.json")
 
         //val image : ImageView= findViewById(R.drawable.person_icon)
 
 
-
         //setSupportActionBar(toolbar)
 
-        if (contacts != null) {
-            initRecyclerView(contacts)
-        } else {
-            Log.i("tag", "contacts is null")
-        }
+        contacts?.let { initRecyclerView(it) } ?: Log.i("tag", "contacts is null")
 
 
         //val lv = findViewById<ListView>(R.id.listevue)
@@ -116,7 +107,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             Toast.makeText(this, "Done BACKKK FROM 23", Toast.LENGTH_LONG).show()
         }
         if (requestCode == 4) {
-            Toast.makeText(this, "Done BACKKK FROM 4", Toast.LENGTH_LONG).show()
+
+            if (resultCode == Activity.RESULT_OK) { // Get String data from Intent
+                val nom = data!!.getStringExtra("ContactSurname")
+                val prenom = data!!.getStringExtra("ContactName")
+                val address = data!!.getStringExtra("ContactAddress")
+                val numero = data!!.getStringExtra("ContactNumber")
+                val image = data.getStringExtra("ContactImage")
+                var fileUri: Uri = Uri.parse(image)
+                // val imageBitmap = data!!.extras!!.get("ContactImage") as Bitmap
+
+                contacts!!.add(0, Contact(nom!!, prenom!!, numero!!, image!!, address!!))
+                recycler_view.adapter!!.notifyDataSetChanged()
+
+                Toast.makeText(this, "Done BACKKK FROM 4", Toast.LENGTH_LONG).show()
+            }
+
+
         }
     }
 

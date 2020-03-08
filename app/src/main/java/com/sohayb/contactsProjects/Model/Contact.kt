@@ -1,6 +1,4 @@
-package com.sohayb.tplistecontacts.Model
-
-import android.widget.ImageView
+package com.sohayb.contactsProjects.Model
 
 data class Contact(
 

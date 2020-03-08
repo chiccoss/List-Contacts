@@ -1,34 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    tools:showIn="@layout/create_contact">
+    android:background="#60355F"
+    tools:context=".ViewContact">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
 
-    <EditText
-        android:id="@+id/TR"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/textview"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.485"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.267" />
+        <Button
+            android:id="@+id/ButtonImage"
+            android:layout_width="216dp"
+            android:layout_height="63dp"
+            android:layout_marginTop="136dp"
+            android:layout_marginBottom="77dp"
+            android:text="insert image"
+            app:layout_constraintBottom_toTopOf="@+id/CNomEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/textview"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</LinearLayout>
+        <ImageView
+            android:id="@+id/CimageView"
+            android:layout_width="389dp"
+            android:layout_height="221dp"
+            android:layout_marginTop="19dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/person_icon" />
+
+        <TextView
+            android:id="@+id/Cprenom"
+            android:layout_width="83dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/rounded_corner"
+            android:textColor="@color/bianco"
+            android:text="Prenom : "
+            android:textSize="@dimen/TXTSIZE"
+            app:layout_constraintEnd_toStartOf="@+id/CPrenomEditText"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Cnom" />
+
+        <TextView
+            android:id="@+id/Caddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:background="@drawable/rounded_corner"
+            android:text="Address : "
+            android:textColor="@color/bianco"
+            android:textSize="@dimen/TXTSIZE"
+            app:layout_constraintEnd_toStartOf="@+id/CAdressEditText"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Cprenom" />
+
+        <EditText
+            android:id="@+id/CPrenomEditText"
+            android:layout_width="242dp"
+            android:layout_height="40dp"
+
+            android:layout_marginTop="32dp"
+            android:text="TextView"
+            android:textColor="@color/bianco"
+            android:textSize="@dimen/TXTSIZE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/Cprenom"
+            app:layout_constraintTop_toBottomOf="@+id/CNomEditText" />
+
+        <EditText
+            android:id="@+id/CAdressEditText"
+            android:layout_width="242dp"
+            android:layout_height="82dp"
+            android:layout_marginTop="52dp"
+            android:text="TextView"
+
+            android:textColor="@color/bianco"
+            android:textSize="@dimen/TXTSIZE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/Caddress"
+            app:layout_constraintTop_toBottomOf="@+id/CPrenomEditText" />
+
+        <EditText
+            android:id="@+id/CNumEditText"
+            android:layout_width="233dp"
+            android:layout_height="139dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp"
+            android:text="TextView"
+            android:textColor="@color/bianco"
+            android:textSize="@dimen/TXTSIZE"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/CNum"
+            app:layout_constraintTop_toBottomOf="@+id/CAdressEditText" />
+
+        <TextView
+            android:id="@+id/CNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="72dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/rounded_corner"
+            android:textColor="@color/bianco"
+            android:text="@string/telephone"
+            android:textSize="@dimen/TXTSIZE"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/CNumEditText"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Caddress"
+            app:layout_constraintVertical_bias="0.028" />
+
+        <EditText
+
+            android:id="@+id/CNomEditText"
+            android:layout_width="280dp"
+            android:layout_height="41dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
+            android:text="TextView"
+            android:textColor="@color/bianco"
+            android:textSize="@dimen/TXTSIZE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/Cnom"
+            app:layout_constraintTop_toBottomOf="@+id/CimageView" />
+
+        <TextView
+            android:id="@+id/Cnom"
+            android:textColor="@color/bianco"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/rounded_corner"
+            android:text="Nom :"
+
+            android:textSize="@dimen/TXTSIZE"
+            app:layout_constraintEnd_toStartOf="@+id/CNomEditText"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/CimageView" />
+
+        <Button
+            android:id="@+id/CButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:text="Create Contact"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/CNumEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/CNum">
+
+        </Button>
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/Cgroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

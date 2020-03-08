@@ -1,4 +1,4 @@
-package com.sohayb.tplistecontacts
+package com.sohayb.contactsProjects
 
 import org.junit.Test
 

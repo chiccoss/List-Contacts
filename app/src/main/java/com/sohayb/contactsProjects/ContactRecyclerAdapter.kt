@@ -1,10 +1,10 @@
-package com.sohayb.tplistecontacts
+package com.sohayb.contactsProjects
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +13,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.sohayb.tplistecontacts.Model.Contact
-import com.squareup.picasso.Picasso
+import com.sohayb.contactsProjects.Model.Contact
 import kotlinx.android.synthetic.main.contacts_view.view.*
-import kotlinx.android.synthetic.main.view_contact.view.*
 import kotlin.collections.ArrayList
 
 
@@ -69,10 +67,19 @@ class ContactRecyclerAdapter(val contacts: ArrayList<Contact>) :
                 .placeholder(R.drawable.ic_launcher_background)
                 .error(R.drawable.ic_launcher_background)
 
-            Glide.with(itemView.context)
-                .applyDefaultRequestOptions(requestOptions)
-                .load(contact.image)
-                .into(ContactImage)
+            val fileUri: Uri?
+
+            if (contact.image.contains("http")) {
+                Glide.with(itemView.context)
+                    .applyDefaultRequestOptions(requestOptions)
+                    .load(contact.image)
+                    .into(ContactImage)
+            } else {
+
+                fileUri = Uri.parse(contact.image)
+                ContactImage.setImageURI(fileUri)
+            }
+
 
             //Picasso.get().load(contact.image).into(profile_image);
             contactName.text = contact.Nom + " " + contact.Prenom
@@ -96,19 +103,17 @@ class ContactRecyclerAdapter(val contacts: ArrayList<Contact>) :
             }
 
             itemView.setOnLongClickListener {
-                val WindowOptions =
+                val items =
                     arrayOf("Edit", "View", "Place on home screen", "Delete", "Call")
 
                 val builder =
                     context?.let { it1 -> AlertDialog.Builder(it1) }
                 builder?.setTitle("Select an option")
                 builder?.setItems(
-                    WindowOptions
-                ) { _, which ->
-                    //dialog , which
-                    // the user clicked on colors[which]
+                    items
+                ) { _, which ->//dialog , which
                     testSelectedItem(
-                        WindowOptions[which],
+                        items[which],
                         contact,
                         contacts,
                         context,
@@ -165,7 +170,7 @@ fun testSelectedItem(
     }
 
     if (option == "Place on home screen") {
-        //contacts.PlaceOnHomeScreen(contact)
+        //@TODO contacts.PlaceOnHomeScreen(contact)
     }
 
     if (option == "Call") {
@@ -173,11 +178,7 @@ fun testSelectedItem(
         callPhone(context, contact.phoneNum) //contact.phoneNum)
     }
 
-
 }
-
-// 23 MODIFY
-
 
 fun callPhone(context: Context?, phoneNum: String) {
     val intent = Intent(Intent.ACTION_DIAL)
@@ -185,20 +186,3 @@ fun callPhone(context: Context?, phoneNum: String) {
     (context as Activity).startActivity(intent)
 
 }
-//DIALOG BUIDER
-/*    val dialogBuilder = context?.let { it1 -> AlertDialog.Builder(it1) }
-                dialogBuilder!!.setMessage("Do you want to close this application ?")
-                    .setPositiveButton("Proceed", DialogInterface.OnClickListener { it, id ->
-                        //listeEquipes.removeAt(i)
-                        //adapter.notifyDataSetChanged()
-                        //finish()
-                    })
-                    .setNegativeButton("Cancel", DialogInterface.OnClickListener { it, id ->
-                        it.cancel()
-                    })
-
-                val alert = dialogBuilder.create()
-
-                alert.setTitle("You are connected")
-
-                alert.show()*/

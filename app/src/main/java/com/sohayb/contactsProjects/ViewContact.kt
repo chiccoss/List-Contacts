@@ -1,28 +1,23 @@
-package com.sohayb.tplistecontacts
+package com.sohayb.contactsProjects
 
-import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.provider.MediaStore
-import android.util.Log
-import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.modify_contact.*
 import kotlinx.android.synthetic.main.view_contact.*
-import kotlinx.android.synthetic.main.view_contact.imageView
 
-class ModifyContact : AppCompatActivity() {
+class ViewContact : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.view_contact)
 
-        setContentView(R.layout.modify_contact)
+        val im = "https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png"
+
 
         var bundles = intent.extras
 
@@ -32,52 +27,19 @@ class ModifyContact : AppCompatActivity() {
         val image: String? = bundles!!.getString("ContactImage")
         val address: String? = bundles!!.getString("ContactAddress")
 
-        Picasso.get().load(image).into(EimageView);
-        EAdressTextView.setText(address)
-        ENumTextView.setText(phoneNum)
-        EPrenomTextView.setText(Prenom)
-        ENomTextView.setText(Nom)
+        Picasso.get().load(image).into(imageView);
+        PrenomTextView.text = Prenom
+        AdressTextView.text = address
+        NumTextView.text = phoneNum
 
+        NomTextView.text = Nom
 
-        buttonModify.setOnClickListener {
-
-            if (ENomTextView.text.toString() != "") {
-                /* val destination = Intent(this, MainActivity::class.java).apply {
-                     putExtra("ContactName", "contact.Nom")
-                     putExtra("ContactSurname", "contact.Prenom")
-                     putExtra("ContactAddress", "contact.address")
-                     putExtra("ContactImage", "contact.image")
-                     putExtra("ContactNumber", "contact.phoneNum")
-                 }*/
-                //startActivity(destination)
-                //@todo set contact name to this : contact.Nom.text = ENomTextView.text.toString()
-                Log.i("tag", "From 1")
-                Toast.makeText(this, "You changed nada", Toast.LENGTH_SHORT).show();
-            }
-            if (EAdressTextView.text.toString() != "") {
-                Log.i("tag", "From 2")
-                Toast.makeText(this, "You changed nada", Toast.LENGTH_SHORT).show();
-            }
-            if (EPrenomTextView.text.toString() != "") {
-                Log.i("tag", "From 3")
-                Toast.makeText(this, "You changed nada", Toast.LENGTH_SHORT).show();
-            }
-            if (ENumTextView.text.toString() != "") {
-                Log.i("tag", "From 4")
-                Toast.makeText(this, "You changed nada", Toast.LENGTH_SHORT).show();
-            }
-            onBackPressed()
-
-        }
-
-        EimageView.setOnClickListener {
+        imageView.setOnClickListener {
             dispatchTakePictureIntent()
         }
 
 
-
     }
-
 
     private fun dispatchTakePictureIntent() {
 
@@ -105,7 +67,7 @@ class ModifyContact : AppCompatActivity() {
 
         val alert = dialogBuilder.create()
 
-        alert.setTitle("You are connected")
+        alert.setTitle("Choose image")
 
         alert.show()
 
@@ -118,24 +80,16 @@ class ModifyContact : AppCompatActivity() {
         if (requestCode == 111 && resultCode == RESULT_OK) {
             val selectedFile = data?.data //The uri with the location of the file
 
-            EimageView.setImageURI(selectedFile)
-            EimageView.adjustViewBounds = true
+            imageView.setImageURI(selectedFile)
+            imageView.adjustViewBounds = true
+
         }
         if (requestCode == 1 && resultCode == RESULT_OK) {
             val imageBitmap = data!!.extras!!.get("data") as Bitmap
-            EimageView.setImageBitmap(imageBitmap)
-            EimageView.adjustViewBounds = true
+            imageView.setImageBitmap(imageBitmap)
+            imageView.adjustViewBounds = true
         }
 
 
     }
-
-
-    override fun onBackPressed() {
-        finish()
-        //super.onBackPressed()
-
-
-    }
-
 }
