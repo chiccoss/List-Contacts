@@ -8,7 +8,4 @@ data class Contact(
     val image: String,
     val address: String
 
-) {
-
-
-}
+)
