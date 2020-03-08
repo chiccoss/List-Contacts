@@ -48,14 +48,6 @@ class CreateNewContact : Activity() {
 
             if (CAdressEditText.text.toString() != "") {
                 address = CAdressEditText.text.toString()
-                /* val destination = Intent(this, MainActivity::class.java).apply {
-                     putExtra("ContactName", "contact.Nom")
-                     putExtra("ContactSurname", "contact.Prenom")
-                     putExtra("ContactAddress", "contact.address")
-                     putExtra("ContactImage", "contact.image")
-                     putExtra("ContactNumber", "contact.phoneNum")
-                 }*/
-                //startActivity(destination)
                 setResult(RESULT_OK, intent);
                 //@todo set contact name to this : contact.Nom.text = ENomTextView.text.toString()
                 Log.i("tag", "From 1")
@@ -84,9 +76,9 @@ class CreateNewContact : Activity() {
             if (CimageView != null) {
                 Log.i("tag", "From 5")
                 Toast.makeText(this, "You changed nada iamge", Toast.LENGTH_SHORT).show();
-                image = selectedFile.toString()
+                image = imageBitmap.toString()// selectedFile.toString()
             }
-            Log.i("selectec file", selectedFile.toString())
+            Log.i("selectec file", imageBitmap.toString())
             //Log.i("selectec files",imageBitmap.toString())
 
 
@@ -94,8 +86,9 @@ class CreateNewContact : Activity() {
                 putExtra("ContactName", nom)
                 putExtra("ContactSurname", prenom)
                 putExtra("ContactAddress", address)
-                putExtra("ContactImage", image)
+                putExtra("ContactImage", imageBitmap)
                 putExtra("ContactNumber", numPhone)
+
             }
             setResult(RESULT_OK, intent)
             onBackPressed()
@@ -157,6 +150,9 @@ class CreateNewContact : Activity() {
         if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
             //WITH  CAMERA
             imageBitmap = data!!.extras!!.get("data") as Bitmap
+            Log.i("tag assigned", "assigned")
+            Log.i("tag assigned", imageBitmap.toString())
+
             CimageView.setImageBitmap(imageBitmap)
             CimageView.adjustViewBounds = true
             ButtonImage.setVisibility(View.GONE);
