@@ -1,11 +1,11 @@
 package com.sohayb.contactsProjects
 
-import android.content.DialogInterface
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
-import androidx.appcompat.app.AlertDialog
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.view_contact.*
@@ -18,7 +18,7 @@ class ViewContact : AppCompatActivity() {
 
         val im = "https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png"
 
-
+        val fileUri: Uri?
         var bundles = intent.extras
 
         val Nom: String? = bundles!!.getString("ContactSurname")
@@ -26,70 +26,40 @@ class ViewContact : AppCompatActivity() {
         val phoneNum: String? = bundles!!.getString("ContactNumber")
         val image: String? = bundles!!.getString("ContactImage")
         val address: String? = bundles!!.getString("ContactAddress")
+        if (image!!.contains("http")) {
+            Picasso.get().load(image).into(imageView);
+        } else {
+            fileUri = Uri.parse(image)
+            imageView.setImageURI(fileUri)
 
-        Picasso.get().load(image).into(imageView);
+        }
         PrenomTextView.text = Prenom
         AdressTextView.text = address
         NumTextView.text = phoneNum
-
         NomTextView.text = Nom
 
-        imageView.setOnClickListener {
-            dispatchTakePictureIntent()
+        buttonCall.setOnClickListener {
+            callPhone(this, phoneNum!!) //contact.phoneNum)
         }
+        btnSendSMS.setOnClickListener {
+            sendSMS(phoneNum)
+        }
+
 
 
     }
 
-    private fun dispatchTakePictureIntent() {
-
-        //Alert dialog
-        val dialogBuilder = AlertDialog.Builder(this)
-        dialogBuilder.setMessage("From where would you like to get the picture ?")
-            .setPositiveButton("Storage", DialogInterface.OnClickListener { _, _ ->
-                //it, id ->
-                val intent = Intent()
-                    .setType("*/*")
-                    .setAction(Intent.ACTION_GET_CONTENT)
-
-                startActivityForResult(Intent.createChooser(intent, "Select a file"), 111)
-
-            })
-            .setNegativeButton("Take picture", DialogInterface.OnClickListener { _, _ ->
-                //it, id ->
-                val REQUEST_IMAGE_CAPTURE = 1
-                Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-                    takePictureIntent.resolveActivity(packageManager)?.also {
-                        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-                    }
-                }
-            })
-
-        val alert = dialogBuilder.create()
-
-        alert.setTitle("Choose image")
-
-        alert.show()
-
+    fun callPhone(context: Context?, phoneNum: String) {
+        val intent = Intent(Intent.ACTION_DIAL)
+        intent.data = Uri.parse("tel:$phoneNum")
+        (context as Activity).startActivity(intent)
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == 111 && resultCode == RESULT_OK) {
-            val selectedFile = data?.data //The uri with the location of the file
-
-            imageView.setImageURI(selectedFile)
-            imageView.adjustViewBounds = true
-
-        }
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            val imageBitmap = data!!.extras!!.get("data") as Bitmap
-            imageView.setImageBitmap(imageBitmap)
-            imageView.adjustViewBounds = true
-        }
-
-
+    fun sendSMS(num: String?) {
+        val number = num // The number on which you want to send SMS
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", number, null)))
     }
+
+
 }

@@ -24,6 +24,8 @@ class CreateNewContact : Activity() {
 
     var imageBitmap: Bitmap? = null
     var selectedFile: Uri? = null
+    var B: Boolean = false
+    var U: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.create_contact)
@@ -33,6 +35,7 @@ class CreateNewContact : Activity() {
         var address: String? = null
         var numPhone: String? = null
         var image: String? = null
+
 
 
         ButtonImage.setOnClickListener {
@@ -49,46 +52,57 @@ class CreateNewContact : Activity() {
             if (CAdressEditText.text.toString() != "") {
                 address = CAdressEditText.text.toString()
                 setResult(RESULT_OK, intent);
-                //@todo set contact name to this : contact.Nom.text = ENomTextView.text.toString()
-                Log.i("tag", "From 1")
             }
             if (CNomEditText.text.toString() != "") {
-                Log.i("tag", "From 2")
                 nom = CNomEditText.text.toString()
             }
             if (CNumEditText.text.toString() != "") {
-                Log.i("tag", "From 3")
+
 
                 if (PhoneIsValid(CNumEditText.text.toString())) {
                     numPhone = CNumEditText.text.toString()
                 } else {
-                    Toast.makeText(this, "Phone number invalid", Toast.LENGTH_SHORT).show();
+
                     setResult(RESULT_CANCELED)
                     onBackPressed()
                 }
 
             }
             if (CPrenomEditText.text.toString() != "") {
-                Log.i("tag", "From 4")
+
                 prenom = CPrenomEditText.text.toString()
             }
 
             if (CimageView != null) {
-                Log.i("tag", "From 5")
-                Toast.makeText(this, "You changed nada iamge", Toast.LENGTH_SHORT).show();
-                image = imageBitmap.toString()// selectedFile.toString()
+                Log.i("tagB", imageBitmap.toString())
+                Log.i("tagS", selectedFile.toString())
+
+                if (imageBitmap == null) {
+                    image = selectedFile.toString()
+
+                } else {
+                    image = imageBitmap.toString()
+                }
+
+
             }
-            Log.i("selectec file", imageBitmap.toString())
-            //Log.i("selectec files",imageBitmap.toString())
 
 
             val intent = Intent().apply {
                 putExtra("ContactName", nom)
                 putExtra("ContactSurname", prenom)
                 putExtra("ContactAddress", address)
-                putExtra("ContactImage", imageBitmap)
                 putExtra("ContactNumber", numPhone)
+            }
 
+            if (B && !U) {
+                intent.apply {
+                    putExtra("ContactImage", imageBitmap)
+                }
+            } else {
+                intent.apply {
+                    putExtra("ContactImage", image)
+                }
             }
             setResult(RESULT_OK, intent)
             onBackPressed()
@@ -128,7 +142,7 @@ class CreateNewContact : Activity() {
 
         val alert = dialogBuilder.create()
 
-        alert.setTitle("You are connected")
+        alert.setTitle("SELECT IMAGE ")
 
         alert.show()
 
@@ -141,21 +155,20 @@ class CreateNewContact : Activity() {
         if (requestCode == 111 && resultCode == AppCompatActivity.RESULT_OK) {
             // FROM STORAGE
             selectedFile = data?.data //The uri with the location of the file
-
             CimageView.setImageURI(selectedFile)
-            Log.i("tagggg", selectedFile.toString())
             CimageView.adjustViewBounds = true
             ButtonImage.setVisibility(View.GONE);
+            B = false
+            U = true
         }
         if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
             //WITH  CAMERA
             imageBitmap = data!!.extras!!.get("data") as Bitmap
-            Log.i("tag assigned", "assigned")
-            Log.i("tag assigned", imageBitmap.toString())
-
             CimageView.setImageBitmap(imageBitmap)
             CimageView.adjustViewBounds = true
             ButtonImage.setVisibility(View.GONE);
+            B = true
+            U = false
         }
     }
 

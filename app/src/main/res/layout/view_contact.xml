@@ -82,10 +82,9 @@
         <TextView
             android:id="@+id/NumTextView"
 
-            android:layout_width="233dp"
-            android:layout_height="139dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="8dp"
+            android:layout_width="234dp"
+            android:layout_height="38dp"
+            android:layout_marginTop="20dp"
             android:text="TextView"
             android:textColor="@color/bianco"
             android:textSize="@dimen/TXTSIZE"
@@ -93,7 +92,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/Num"
-            app:layout_constraintTop_toBottomOf="@+id/AdressTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/AdressTextView"
+            app:layout_constraintVertical_bias="0.065" />
 
         <TextView
             android:id="@+id/Num"
@@ -146,6 +146,36 @@
             android:id="@+id/group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/buttonCall"
+            android:layout_width="127dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="76dp"
+            android:background="@drawable/rounded_corner"
+            android:text="@string/call_me_tho"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/NumTextView"
+            app:layout_constraintHorizontal_bias="0.846"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Num"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/btnSendSMS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/rounded_corner"
+            android:text="Send SMS"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.494"
+            app:layout_constraintStart_toEndOf="@+id/buttonCall"
+            app:layout_constraintTop_toBottomOf="@+id/NumTextView"
+            app:layout_constraintVertical_bias="1.0"></Button>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
