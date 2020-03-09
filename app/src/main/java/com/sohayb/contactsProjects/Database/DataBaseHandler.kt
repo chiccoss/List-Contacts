@@ -2,10 +2,12 @@ package com.sohayb.contactsProjects.Database
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import android.widget.Toast
-import com.sohayb.contactsProjects.Database.*
+import androidx.core.content.contentValuesOf
 import com.sohayb.contactsProjects.Model.Contact
 
 
@@ -28,7 +30,8 @@ class DataBaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-
+        db!!.execSQL("DROP TABLE IF EXISTS $TABLE_NAME");
+        onCreate(db);
     }
 
     fun insertData(user: Contact) {
@@ -47,8 +50,35 @@ class DataBaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         } else {
             Toast.makeText(cont, "success in insert IN DB", Toast.LENGTH_SHORT).show()
         }
-
     }
 
 
+    fun getAppCategoryDetail(): ArrayList<String?>? {
+
+        val selectQuery = "SELECT  * FROM $TABLE_NAME"
+        val db = this.readableDatabase
+        val cursor: Cursor = db.rawQuery(selectQuery, null)
+        val data: ArrayList<String?>? = null
+        if (cursor.moveToFirst()) {
+            do {
+                // get the data into array, or class variable
+                data!!.add(cursor.getString(1))
+                Toast.makeText(cont, "success in GET IN DB", Toast.LENGTH_SHORT).show()
+
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return data
+    }
+
+
+    fun deleteFromDatabase(contact: Contact) {
+        val db = writableDatabase
+        var phone = contact.phoneNum
+        db.execSQL("delete from $TABLE_NAME where $COL_PHONE==$phone");
+
+    }
+
 }
+
+

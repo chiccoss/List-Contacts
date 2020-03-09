@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.sohayb.contactsProjects.Database.DataBaseHandler
 import com.sohayb.contactsProjects.Model.Contact
 import kotlinx.android.synthetic.main.contacts_view.view.*
 import kotlin.collections.ArrayList
@@ -151,6 +152,8 @@ fun testSelectedItem(
 ) {
     if (option == "Delete") {
         contacts.remove(contact)
+        var db = context?.let { DataBaseHandler(it) }
+        db!!.deleteFromDatabase(contact)
         contactRecyclerAdapter.notifyDataSetChanged()
     }
 

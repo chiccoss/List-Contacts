@@ -39,8 +39,8 @@ class MainActivity : AppCompatActivity() {
 
         contacts = DataSource.GetDataSet(this) //get(this,"Contacts.json")
         contacts?.let { initRecyclerView(it) } ?: Log.i("tag", "contacts is null")
-
-
+        var db = DataBaseHandler(context)
+        db.getAppCategoryDetail()
     }
 
 
