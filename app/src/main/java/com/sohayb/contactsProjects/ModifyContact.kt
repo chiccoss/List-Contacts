@@ -159,7 +159,7 @@ class ModifyContact : AppCompatActivity() {
 
         // Initialize a new file instance to save bitmap object
         var file = wrapper.getDir("Images", Context.MODE_PRIVATE)
-        file = File(file, "${UUID.randomUUID()}.jpg")
+        file.let { File(it, "${UUID.randomUUID()}.jpg") }
 
         try {
             // Compress the bitmap and save in jpg format

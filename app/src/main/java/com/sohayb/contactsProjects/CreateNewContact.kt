@@ -22,6 +22,7 @@ import com.sohayb.contactsProjects.Model.Contact
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.create_contact.*
 import kotlinx.android.synthetic.main.modify_contact.*
+import org.jetbrains.anko.toast
 import java.io.*
 import java.net.URI
 import java.util.*
@@ -37,11 +38,11 @@ class CreateNewContact : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.create_contact)
         ButtonImage.setVisibility(View.VISIBLE);
-        var nom: String? = null
-        var prenom: String? = null
-        var address: String? = null
-        var numPhone: String? = null
-        var image: String? = null
+        var nom = ""
+        var prenom = ""
+        var address = ""
+        var numPhone = ""
+        var image = ""
 
 
         //var db: DataBaseHandler?= DataBaseHandler(this)
@@ -60,10 +61,21 @@ class CreateNewContact : Activity() {
 
             if (CAdressEditText.text.toString() != "") {
                 address = CAdressEditText.text.toString()
-                setResult(RESULT_OK, intent);
+            } else {
+                toast("Vous avez rien inseré dans le champ address")
+                setResult(RESULT_CANCELED)
+                onBackPressed()
             }
+
             if (CNomEditText.text.toString() != "") {
-                nom = CNomEditText.text.toString()
+
+                if (CNomEditText.text.toString().matches("[a-zA-Z]+".toRegex())) {
+                    nom = CNomEditText.text.toString()
+                } else {
+                    toast("Vous avez inseré un caractere non valide dans le champ nom")
+                    setResult(RESULT_CANCELED)
+                    onBackPressed()
+                }
             }
             if (CNumEditText.text.toString() != "") {
 
@@ -79,11 +91,21 @@ class CreateNewContact : Activity() {
             }
             if (CPrenomEditText.text.toString() != "") {
 
-                prenom = CPrenomEditText.text.toString()
+                if (CPrenomEditText.text.toString().matches("[a-zA-Z]+".toRegex())) {
+                    prenom = CPrenomEditText.text.toString()
+                } else {
+                    toast("Vous avez inseré un caractere non valide dans le champ prenom")
+                    setResult(RESULT_CANCELED)
+                    onBackPressed()
+                }
             }
 
             if (CimageView != null) {
                 image = selectedFile.toString()
+            } else {
+                toast("Vous avez is une image")
+                setResult(RESULT_CANCELED)
+                onBackPressed()
             }
 
             val intent = Intent().apply {
@@ -194,3 +216,4 @@ class CreateNewContact : Activity() {
 
 
 }
+

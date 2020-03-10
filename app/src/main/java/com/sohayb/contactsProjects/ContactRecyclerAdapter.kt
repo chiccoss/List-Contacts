@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.sohayb.contactsProjects
 
 import android.app.Activity
@@ -18,13 +20,12 @@ import com.sohayb.contactsProjects.Model.Contact
 import kotlinx.android.synthetic.main.contacts_view.view.*
 import kotlin.collections.ArrayList
 
-
+var context: Context? = null
+var db: DataBaseHandler? = null
 class ContactRecyclerAdapter(val contacts: ArrayList<Contact?>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
-    var context: Context? = null
-    var db: DataBaseHandler? = null
     val OPEN_REQUEST_CODE = 41
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -180,7 +181,20 @@ fun testSelectedItem(
     }
 
     if (option == "Place on home screen") {
-        //@TODO contacts.PlaceOnHomeScreen(contact)
+        var target = Intent(context, ViewContact::class.java)
+
+        var shortcut = Intent()
+        shortcut.apply {
+            putExtra(Intent.EXTRA_SHORTCUT_INTENT, target)
+            putExtra(Intent.EXTRA_SHORTCUT_NAME, contact.Prenom)
+            putExtra(
+                Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+                Intent.ShortcutIconResource.fromContext(context, R.drawable.contacts)
+            )
+            toast("went to home screen")
+            action = "android.permission.INSTALL_SHORTCUT"
+        }
+        context!!.sendBroadcast(shortcut)
     }
 
     if (option == "Call") {
@@ -188,6 +202,10 @@ fun testSelectedItem(
         callPhone(context, contact.phoneNum) //contact.phoneNum)
     }
 
+}
+
+fun toast(s: String) {
+    Toast.makeText(context, s, Toast.LENGTH_SHORT).show()
 }
 
 fun callPhone(context: Context?, phoneNum: String) {
