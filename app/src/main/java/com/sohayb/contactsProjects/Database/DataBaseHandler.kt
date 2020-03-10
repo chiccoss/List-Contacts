@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import android.widget.Toast
 import com.sohayb.contactsProjects.Model.Contact
 
@@ -14,7 +15,7 @@ class DataBaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     var cont = context
     override fun onCreate(db: SQLiteDatabase?) {
 
-
+        Log.i("gg", "oCreate called")
         val createTable =
             "CREATE TABLE $TABLE_NAME ( " +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT" +
@@ -30,7 +31,9 @@ class DataBaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db!!.execSQL("DROP TABLE IF EXISTS $TABLE_NAME");
         onCreate(db);
+        Log.i("gg", "onUpgrade called")
     }
+
 
     fun insertData(user: Contact) {
         val db = writableDatabase
@@ -46,17 +49,17 @@ class DataBaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
 
             Toast.makeText(cont, "FAILED IN DB", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(cont, "success in insert IN DB", Toast.LENGTH_SHORT).show()
+            Toast.makeText(cont, "success in insert IN DB", Toast.LENGTH_LONG).show()
         }
     }
 
 
     fun getAllData(): ArrayList<Contact?>? {
 
-        val selectQuery = "SELECT  * FROM $TABLE_NAME"
-        val db = this.readableDatabase
+        val selectQuery = "SELECT * FROM $TABLE_NAME"
+        val db = readableDatabase
         val cursor: Cursor = db.rawQuery(selectQuery, null)
-        val data: ArrayList<Contact?>? = null
+        val data: ArrayList<Contact?>? = ArrayList()
         if (cursor.moveToFirst()) {
             do {
                 // get the data into array, or class variable
@@ -68,12 +71,16 @@ class DataBaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
                         cursor.getString(cursor.getColumnIndex(COL_IMAGE)),
                         cursor.getString(cursor.getColumnIndex(COL_ADDRESS))
                     )
-                )
-                Toast.makeText(cont, "GOT ALL DATA", Toast.LENGTH_SHORT).show()
 
+                )
 
             } while (cursor.moveToNext())
         }
+        for (d in data!!) {
+            Log.i("Contact", d!!.Nom)
+        }
+        Toast.makeText(cont, "GOT ALL DATA", Toast.LENGTH_SHORT).show()
+
         cursor.close()
         return data
 
@@ -102,7 +109,12 @@ class DataBaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     fun deleteFromDatabase(contact: Contact) {
         val db = writableDatabase
         var phone = contact.phoneNum
-        db.execSQL("DELETE FROM $TABLE_NAME WHERE $COL_PHONE LIKE '$phone'");
+        var name = contact.Prenom
+        var address = contact.address
+        var surname = contact.Nom
+        var image = contact.image
+
+        db.execSQL("DELETE FROM $TABLE_NAME WHERE $COL_PHONE='$phone' AND $COL_NAME='$name' AND $COL_IMAGE='$image' AND $COL_SURNAME='$surname' AND $COL_ADDRESS='$address'  ");
         Toast.makeText(cont, "DEETE FROM DB", Toast.LENGTH_SHORT).show()
     }
 }

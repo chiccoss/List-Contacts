@@ -1,57 +1,50 @@
 package com.sohayb.contactsProjects
 
-import com.sohayb.contactsProjects.R
 import android.app.Activity
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sohayb.contactsProjects.Database.DataBaseHandler
 import com.sohayb.contactsProjects.Model.Contact
 import kotlinx.android.synthetic.main.content_main.*
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.OutputStream
-import java.util.*
 import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
-    var contacts: ArrayList<Contact>? = null
     val context = this
-
+    var db = DataBaseHandler(context)
     // @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
 
         var bunldes: Bundle? = intent.extras
 
-        contacts = DataSource.GetDataSet(this) //get(this,"Contacts.json")
-        contacts?.let { initRecyclerView(it) } ?: Log.i("tag", "contacts is null")
-        var db = DataBaseHandler(context)
+        //var contacts=DataSource.GetDataSet(this,db) //get(this,"Contacts.json")
 
+        db.getAllData()?.let { initRecyclerView(it) } ?: Log.i("tag", "contacts is null")
 
-    }
-
-
-    private fun initRecyclerView(contacts: ArrayList<Contact>) {
 
         val fab: View = findViewById(R.id.fab)
         fab.setOnClickListener { view ->
+
+            /* var t=db.getAllData()
+             for( n in t!!){
+                 Log.i("print",n!!.Nom)
+             }*/
             val destination = Intent(this@MainActivity, CreateNewContact::class.java)
             startActivityForResult(destination, 4)
         }
+    }
+
+
+    private fun initRecyclerView(contacts: ArrayList<Contact?>) {
+
 
         recycler_view.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -82,8 +75,8 @@ class MainActivity : AppCompatActivity() {
                 //toastS(image)
                 //@TODO IMPLEMENT MODIFY CONTACT
                 // var fileUri: Uri = Uri.parse(image)
-                recycler_view.adapter!!.notifyDataSetChanged()
-
+                //recycler_view.adapter!!.notifyDataSetChanged()
+                db.getAllData()?.let { initRecyclerView(it) }
 
             }
         }
@@ -97,14 +90,14 @@ class MainActivity : AppCompatActivity() {
                 val image = data.getStringExtra("ContactImage")
 
                 var contact = Contact(nom!!, prenom!!, numero!!, image!!, address!!)
-                var db = DataBaseHandler(context)
+                //var db = DataBaseHandler(context)
                 db.insertData(contact)
-
-                contacts!!.add(0, Contact(nom!!, prenom!!, numero!!, image!!, address!!))
-                toastS(image)
+                db.getAllData()?.let { initRecyclerView(it) }
+                //contacts!!.add(0, Contact(nom!!, prenom!!, numero!!, image!!, address!!))
+                //toastS(image)
 
                 // var fileUri: Uri = Uri.parse(image)
-                recycler_view.adapter!!.notifyDataSetChanged()
+                //recycler_view.adapter!!.notifyDataSetChanged()
             }
         }
     }

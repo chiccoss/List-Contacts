@@ -16,6 +16,10 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.sohayb.contactsProjects.Database.DataBaseHandler
+import com.sohayb.contactsProjects.Model.Contact
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.create_contact.*
 import kotlinx.android.synthetic.main.modify_contact.*
 import java.io.*
@@ -40,7 +44,9 @@ class CreateNewContact : Activity() {
         var image: String? = null
 
 
-
+        //var db: DataBaseHandler?= DataBaseHandler(this)
+        //db!!.getAllData()?.let { initRecyclerView(it) }
+        //recycler_view.adapter!!.notifyDataSetChanged()
         ButtonImage.setOnClickListener {
             dispatchTakePictureIntent()
 
@@ -109,7 +115,7 @@ class CreateNewContact : Activity() {
                 //it, id ->
                 val intent = Intent()
                     .setType("*/*")
-                    .setAction(Intent.ACTION_GET_CONTENT)
+                    .setAction(Intent.ACTION_OPEN_DOCUMENT)
 
                 startActivityForResult(Intent.createChooser(intent, "Select a file"), 111)
 
@@ -171,6 +177,18 @@ class CreateNewContact : Activity() {
 
         // Return the saved bitmap uri
         return Uri.parse(file.absolutePath)
+    }
+
+    private fun initRecyclerView(contacts: ArrayList<Contact?>) {
+
+
+        recycler_view.apply {
+            layoutManager = LinearLayoutManager(this@CreateNewContact)
+            val topSpacingDecorator = TopSpacingItemDecoration(16)
+            addItemDecoration(topSpacingDecorator)
+            adapter = ContactRecyclerAdapter(contacts)
+            (adapter as ContactRecyclerAdapter).notifyDataSetChanged()
+        }
     }
 
 

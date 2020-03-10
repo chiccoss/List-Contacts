@@ -2,6 +2,8 @@ package com.sohayb.contactsProjects
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
+import com.sohayb.contactsProjects.Database.DataBaseHandler
 import com.sohayb.contactsProjects.Model.Contact
 import org.json.JSONArray
 import org.json.JSONObject
@@ -11,22 +13,24 @@ class DataSource {
 
     companion object {
 
-        fun GetDataSet(context: Context): ArrayList<Contact> {
+        fun GetDataSet(
+            context: Context,
+            db: DataBaseHandler
+        ): ArrayList<Contact?>? {
             val jsonString: String
-            val contacts = ArrayList<Contact>();
+            var contacts: ArrayList<Contact?>? = ArrayList()
             try {
                 jsonString =
                     context.assets.open("Contacts.json").bufferedReader().use { it.readText() }
 
-                val json_contact = JSONArray(jsonString)
+                val jsonContact = JSONArray(jsonString)
 
                 var i: Int = 0
-                val size: Int = json_contact.length()
-                var jsonObjectdetail: JSONObject? = null
+                val size: Int = jsonContact.length()
+                var jsonObjectdetail: JSONObject?
                 for (i in 0 until size) {
-                    jsonObjectdetail = json_contact.getJSONObject(i)
-
-                    contacts.add(
+                    jsonObjectdetail = jsonContact.getJSONObject(i)
+                    db.insertData(
                         Contact(
                             jsonObjectdetail.getString("surname"),
                             jsonObjectdetail.getString("name"),
@@ -36,8 +40,10 @@ class DataSource {
 
                         )
                     )
-                }
+                    //contacts!!.add(
 
+                    // )
+                }
 
             } catch (ioException: IOException) {
                 ioException.printStackTrace()
@@ -51,16 +57,16 @@ class DataSource {
                 Log.i("Tag", "ERROOR")
                 return GetDataTestDataSet()
             }
-            Log.i("Tag", "size is " + contacts.size.toString())
+            Log.i("Tag", "size is " + contacts!!.size.toString())
             return contacts
         }
 
-        fun GetDataTestDataSet(): ArrayList<Contact> {
+        fun GetDataTestDataSet(): ArrayList<Contact?>? {
 
-            val contacts: ArrayList<Contact> = ArrayList()
+            val contacts: ArrayList<Contact?>? = ArrayList()
 
             for (i in 1..50) {
-                contacts.add(
+                contacts!!.add(
                     Contact(
                         "Chicco ${i - 1}",
                         "Troll ${i - 1}",

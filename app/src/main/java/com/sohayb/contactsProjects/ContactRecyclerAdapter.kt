@@ -1,6 +1,5 @@
 package com.sohayb.contactsProjects
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -20,11 +19,12 @@ import kotlinx.android.synthetic.main.contacts_view.view.*
 import kotlin.collections.ArrayList
 
 
-class ContactRecyclerAdapter(val contacts: ArrayList<Contact>) :
+class ContactRecyclerAdapter(val contacts: ArrayList<Contact?>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     var context: Context? = null
+    var db: DataBaseHandler? = null
     val OPEN_REQUEST_CODE = 41
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -43,7 +43,7 @@ class ContactRecyclerAdapter(val contacts: ArrayList<Contact>) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ContactsViewHolder -> {
-                holder.bind(contacts.get(position), position, contacts)
+                contacts[position]?.let { holder.bind(it, position, contacts) }
             }
         }
     }
@@ -62,7 +62,7 @@ class ContactRecyclerAdapter(val contacts: ArrayList<Contact>) :
         fun bind(
             contact: Contact,
             position: Int,
-            contacts: ArrayList<Contact>
+            contacts: ArrayList<Contact?>
         ) {
 
 
@@ -146,7 +146,7 @@ class ContactRecyclerAdapter(val contacts: ArrayList<Contact>) :
 fun testSelectedItem(
     option: String,
     contact: Contact,
-    contacts: ArrayList<Contact>,
+    contacts: ArrayList<Contact?>,
     context: Context?,
     contactRecyclerAdapter: ContactRecyclerAdapter
 ) {

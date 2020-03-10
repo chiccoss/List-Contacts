@@ -8,7 +8,11 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.sohayb.contactsProjects.Database.DataBaseHandler
+import com.sohayb.contactsProjects.Model.Contact
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.view_contact.*
 import org.jetbrains.anko.internals.AnkoInternals.getContext
 
@@ -47,7 +51,21 @@ class ViewContact : AppCompatActivity() {
         btnSendSMS.setOnClickListener {
             sendSMS(phoneNum)
         }
+        //var db:DataBaseHandler?=DataBaseHandler(this)
+        //db!!.getAllData()?.let { initRecyclerView(it) }
 
+    }
+
+    private fun initRecyclerView(contacts: ArrayList<Contact?>) {
+
+
+        recycler_view.apply {
+            layoutManager = LinearLayoutManager(this@ViewContact)
+            val topSpacingDecorator = TopSpacingItemDecoration(16)
+            addItemDecoration(topSpacingDecorator)
+            adapter = ContactRecyclerAdapter(contacts)
+            (adapter as ContactRecyclerAdapter).notifyDataSetChanged()
+        }
     }
 
     fun callPhone(context: Context?, phoneNum: String) {
